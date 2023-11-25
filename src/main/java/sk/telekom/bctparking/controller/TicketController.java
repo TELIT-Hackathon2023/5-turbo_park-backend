@@ -19,4 +19,9 @@ public class TicketController implements TicketApi {
     public ResponseEntity<TicketResponseDTO> createTicket(TicketCreateDTO ticketCreateDTO) {
         return new ResponseEntity<>(ticketService.saveTicket(ticketCreateDTO), HttpStatus.CREATED);
     }
+
+    @Override
+    public ResponseEntity<TicketResponseDTO> getTicket(Long ticketId) {
+        return new ResponseEntity<>(ticketService.getTicketById(ticketId), HttpStatus.OK);
+    }
 }
