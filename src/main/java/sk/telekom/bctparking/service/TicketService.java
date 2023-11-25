@@ -2,6 +2,7 @@ package sk.telekom.bctparking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sk.telekom.bctparking.exception.InvalidRequestException;
 import sk.telekom.bctparking.exception.ResourceNotFoundException;
 import sk.telekom.bctparking.mapper.TicketMapper;
 import sk.telekom.bctparking.model.Employee;
@@ -12,6 +13,8 @@ import sk.telekom.bctparking.repository.ParkingSlotRepository;
 import sk.telekom.bctparking.repository.TicketRepository;
 import sk.telekom.openapi.model.TicketCreateDTO;
 import sk.telekom.openapi.model.TicketResponseDTO;
+
+import java.time.OffsetDateTime;
 
 @Service
 @RequiredArgsConstructor
@@ -26,21 +29,49 @@ public class TicketService {
     private final TicketMapper ticketMapper;
 
     public TicketResponseDTO saveTicket(TicketCreateDTO ticketCreateDTO) {
+        if (ticketCreateDTO.getStartDate().isAfter(ticketCreateDTO.getEndDate())) {
+            throw new InvalidRequestException("Start date should not be before end date");
+        }
+
+        if (ticketCreateDTO.getStartDate().isAfter(OffsetDateTime.now().plusDays(2L))) {
+            throw new InvalidRequestException("Ticket cannot be created more than 2 days in advance");
+        }
+
         Employee employee = employeeRepository.findById(ticketCreateDTO.getEmployeeID())
                 .orElseThrow(() -> new ResourceNotFoundException("Employee with given ID was not found"));
         ParkingSlot parkingSlot = parkingSlotRepository.findById(ticketCreateDTO.getParkingSlotID())
                 .orElseThrow(() -> new ResourceNotFoundException("Parking slot with given ID was not found"));
-        // check if employee doesn't have a reservation yet
 
+        if (ticketRepository.countTicketsForEmployeeAfterDate(employee.getId(), OffsetDateTime.now()) > 0) {
+            System.out.println("Employee has reservation");
+            throw new InvalidRequestException("Employee with id "
+                    + employee.getId() + " already has reservation in upcoming days");
+        }
+        System.out.println("Employee doesn't have reservation yet");
 
         Ticket ticket = ticketMapper.mapCreateDTOToEntity(ticketCreateDTO);
         ticket.setEmployee(employee).setParkingSlot(parkingSlot);
-        // check if ticket on given place is in valid time and no one is using that parking slot
         long overlappingTickets = ticketRepository
                 .countOverlappingTicketsForParkingSlot(parkingSlot.getId(), ticket.getStartDate(), ticket.getEndDate());
-        System.out.println(overlappingTickets);
+        if (overlappingTickets > 0) {
+            throw new InvalidRequestException("Provided timeframe is not available");
+        }
 
         ticket = ticketRepository.save(ticket);
-        return ticketMapper.mapEntityToResponseDTO(ticket);
+
+        TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
+        ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
+        ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
+        return ticketResponseDTO;
+    }
+
+    public TicketResponseDTO getTicketById(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket with given id was not found"));
+
+        TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
+        ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
+        ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
+        return ticketResponseDTO;
     }
 }

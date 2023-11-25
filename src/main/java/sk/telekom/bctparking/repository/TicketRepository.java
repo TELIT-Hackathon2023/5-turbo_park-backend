@@ -13,7 +13,12 @@ import java.util.List;
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    List<Ticket> findAllByParkingSlot(ParkingSlot parkingSlot);
+    @Query("SELECT COUNT(t) FROM Ticket t " +
+            "WHERE t.employee.id = :employeeId " +
+            "AND t.startDate > :givenDate")
+    long countTicketsForEmployeeAfterDate(
+            @Param("employeeId") Long employeeId,
+            @Param("givenDate") OffsetDateTime givenDate);
 
     @Query("SELECT COUNT(t) FROM Ticket t " +
             "WHERE t.parkingSlot.id = :parkingSlotId " +
