@@ -78,6 +78,7 @@ paths:
           required: true
           schema:
             type: integer
+            format: int64
       requestBody:
         content:
             application/json:
@@ -270,7 +271,7 @@ components:
           example: 2017-07-21T17:32:28Z
         endDate:
           type: string
-          format: data-time
+          format: date-time
           example: 2017-07-21T17:32:28Z
     TicketResponse:
       allOf:
