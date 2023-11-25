@@ -66,6 +66,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /employee/{id}:
+    put:
+      tags:
+        - employee
+      operationId: updateEmployee
+      description: Update an existing employee
+      requestBody:
+        content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EmployeeCreate'
+        required: true
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Login not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
   /parkingslot/all:
     get:
       tags:
