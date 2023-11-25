@@ -28,4 +28,9 @@ public class EmployeeController implements EmployeeApi {
     public ResponseEntity<EmployeeResponseDTO> updateEmployee(Long employeeId, EmployeeUpdateDTO employeeUpdateDTO) {
         return new ResponseEntity<>(employeeService.update(employeeId, employeeUpdateDTO), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<EmployeeResponseDTO> getEmployee(Long employeeId) {
+        return new ResponseEntity<>(employeeService.getEmployeeById(employeeId), HttpStatus.OK);
+    }
 }

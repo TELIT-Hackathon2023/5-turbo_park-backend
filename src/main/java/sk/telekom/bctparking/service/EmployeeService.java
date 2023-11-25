@@ -41,4 +41,10 @@ public class EmployeeService {
         Employee updatedEmployee = employeeRepository.save(employee);
         return employeeMapper.mapEntityToResponseDTO(updatedEmployee);
     }
+
+    public EmployeeResponseDTO getEmployeeById(Long employeeId) {
+        Employee employee = employeeRepository.findById(employeeId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+        return employeeMapper.mapEntityToResponseDTO(employee);
+    }
 }
