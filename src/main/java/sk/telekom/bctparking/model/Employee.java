@@ -1,5 +1,6 @@
 package sk.telekom.bctparking.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -27,9 +28,12 @@ public class Employee {
 
     private String number;
 
+    @Column(unique = true)
     private String email;
 
+    @Column(unique = true)
     private Long personalId;
 
+    @Column(unique = true)
     private String licencePlateNumber;
 }

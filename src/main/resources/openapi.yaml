@@ -7,55 +7,77 @@ info:
 servers:
   - url: http://localhost:8080
 tags:
-  - name: test
-    description: Test
+  - name: employee
 paths:
-  /test:
-    get:
+  /register:
+    post:
       tags:
-        - test
-      summary: Test endpoint
-      description: Test endpoint
-      operationId: getTest
+        - employee
+      summary: Register employee
+      operationId: createEmployee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeCreate'
+        required: true
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Test'
+                $ref: '#/components/schemas/EmployeeResponse'
         '400':
-          description: Invalid Test
+          description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Test'
+                $ref: '#/components/schemas/ErrorResponse'
+  /login:
+    post:
+      tags:
+        - employee
+      summary: Login employee
+      operationId: loginEmployee
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeLogin'
+      responses:
+        '200':
+          description: Successful login
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Login not successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
         '404':
-          description: Test not found
+          description: Bad request
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Test'
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
-    Test:
-      type: object
-      properties:
-        id:
-          type: integer
-          format: int64
-          example: 10
-        name:
-          type: string
-          example: Test1
     EmployeeCreate:
+      allOf:
+        - $ref: '#/components/schemas/EmployeeLogin'
       type: object
       required:
         - name
         - surname
-        - password
         - phoneNumber
-        - email
         - personalId
         - licencePlateNumber
       properties:
@@ -65,20 +87,45 @@ components:
         surname:
           type: string
           example: Bombers
-        password:
-          type: string
-          example: Bob.amazingPa$$
         phoneNumber:
           type: string
           pattern: '^\+\d{12}$'
           example: "+421901234567"
-        email:
-          type: string
-          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-          example: "bob@example.com"
         personalId:
           type: integer
           format: int32
         licencePlateNumber:
           type: string
           example: "KE223JK"
+    EmployeeResponse:
+      type: object
+      required:
+        - id
+        - email
+        - licencePlateNumber
+      properties:
+        id:
+          type: integer
+          format: int64
+        email:
+          type: string
+        licencePlateNumber:
+          type: string
+    EmployeeLogin:
+      required:
+        - email
+        - password
+      type: object
+      properties:
+        email:
+          type: string
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+          example: "bob@example.com"
+        password:
+          type: string
+          example: "Bob.amazingPa$$"
+    ErrorResponse:
+      type: object
+      properties:
+        message:
+          type: string
