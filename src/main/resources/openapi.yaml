@@ -1,0 +1,84 @@
+openapi: 3.0.3
+info:
+  title: Parking system
+  description: |-
+    Parking system endpoint documentation specification.
+  version: 0.0.1
+servers:
+  - url: http://localhost:8080
+tags:
+  - name: test
+    description: Test
+paths:
+  /test:
+    get:
+      tags:
+        - test
+      summary: Test endpoint
+      description: Test endpoint
+      operationId: getTest
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+        '400':
+          description: Invalid Test
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+        '404':
+          description: Test not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Test'
+components:
+  schemas:
+    Test:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 10
+        name:
+          type: string
+          example: Test1
+    EmployeeCreate:
+      type: object
+      required:
+        - name
+        - surname
+        - password
+        - phoneNumber
+        - email
+        - personalId
+        - licencePlateNumber
+      properties:
+        name:
+          type: string
+          example: Bob
+        surname:
+          type: string
+          example: Bombers
+        password:
+          type: string
+          example: Bob.amazingPa$$
+        phoneNumber:
+          type: string
+          pattern: '^\+\d{12}$'
+          example: "+421901234567"
+        email:
+          type: string
+          pattern: '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+          example: "bob@example.com"
+        personalId:
+          type: integer
+          format: int32
+        licencePlateNumber:
+          type: string
+          example: "KE223JK"
