@@ -1,8 +1,8 @@
 package sk.telekom.bctparking.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import sk.telekom.bctparking.service.ParkingSlotService;
 import sk.telekom.openapi.api.ParkingslotApi;
@@ -18,6 +18,6 @@ public class ParkingSlotController implements ParkingslotApi {
 
     @Override
     public ResponseEntity<List<ParkingSlotResponseDTO>> getParkingSlots() {
-        return ParkingslotApi.super.getParkingSlots();
+        return new ResponseEntity<>(parkingSlotService.getAllParkingSlots(), HttpStatus.OK);
     }
 }
