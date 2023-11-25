@@ -7,6 +7,7 @@ import sk.telekom.bctparking.mapper.EmployeeMapper;
 import sk.telekom.bctparking.model.Employee;
 import sk.telekom.bctparking.repository.EmployeeRepository;
 import sk.telekom.openapi.model.EmployeeCreateDTO;
+import sk.telekom.openapi.model.EmployeeLoginDTO;
 import sk.telekom.openapi.model.EmployeeResponseDTO;
 
 @Service
@@ -27,4 +28,7 @@ public class EmployeeService {
         employee = employeeRepository.save(employee);
         return employeeMapper.mapEntityToResponseDTO(employee);
     }
+
+//    public EmployeeResponseDTO login(EmployeeLoginDTO employeeLoginDTO) {
+//    }
 }
