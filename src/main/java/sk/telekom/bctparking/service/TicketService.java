@@ -13,8 +13,6 @@ import sk.telekom.bctparking.repository.TicketRepository;
 import sk.telekom.openapi.model.TicketCreateDTO;
 import sk.telekom.openapi.model.TicketResponseDTO;
 
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class TicketService {
@@ -38,7 +36,8 @@ public class TicketService {
         Ticket ticket = ticketMapper.mapCreateDTOToEntity(ticketCreateDTO);
         ticket.setEmployee(employee).setParkingSlot(parkingSlot);
         // check if ticket on given place is in valid time and no one is using that parking slot
-        long overlappingTickets = ticketRepository.countOverlappingTickets(ticket.getStartDate(), ticket.getEndDate());
+        long overlappingTickets = ticketRepository
+                .countOverlappingTicketsForParkingSlot(parkingSlot.getId(), ticket.getStartDate(), ticket.getEndDate());
         System.out.println(overlappingTickets);
 
         ticket = ticketRepository.save(ticket);
