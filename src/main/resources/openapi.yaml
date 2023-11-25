@@ -66,17 +66,23 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /employee/{id}:
+  /employee/{employeeId}:
     put:
       tags:
         - employee
       operationId: updateEmployee
       description: Update an existing employee
+      parameters:
+        - name: employeeId
+          in: path
+          required: true
+          schema:
+            type: integer
       requestBody:
         content:
             application/json:
               schema:
-                $ref: '#/components/schemas/EmployeeCreate'
+                $ref: '#/components/schemas/EmployeeUpdate'
         required: true
       responses:
         '200':
@@ -84,10 +90,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
+                $ref: '#/components/schemas/EmployeeResponse'
         '400':
           description: Login not successful
           content:
@@ -131,7 +134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/TicketCreate'
+                $ref: '#/components/schemas/TicketResponse'
         '400':
           description: Bad request
           content:
@@ -194,6 +197,18 @@ components:
         password:
           type: string
           example: "Bob.amazingPa$$"
+    EmployeeUpdate:
+      required:
+        - licencePlateNumber
+        - phoneNumber
+      type: object
+      properties:
+        licencePlateNumber:
+          type: string
+        phoneNumber:
+          type: string
+          pattern: '^\+\d{12}$'
+          example: "+421901234567"
     ParkingSlotResponse:
       required:
         - id
