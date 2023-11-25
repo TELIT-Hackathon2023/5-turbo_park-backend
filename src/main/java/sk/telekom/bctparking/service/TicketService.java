@@ -74,4 +74,13 @@ public class TicketService {
         ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
         return ticketResponseDTO;
     }
+
+    public TicketResponseDTO deleteTicketById(Long ticketId) {
+        Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new ResourceNotFoundException("Ticket was not found"));
+        ticketRepository.delete(ticket);
+        TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
+        ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
+        ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
+        return ticketResponseDTO;
+    }
 }

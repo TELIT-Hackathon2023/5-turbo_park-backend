@@ -24,4 +24,9 @@ public class TicketController implements TicketApi {
     public ResponseEntity<TicketResponseDTO> getTicket(Long ticketId) {
         return new ResponseEntity<>(ticketService.getTicketById(ticketId), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<TicketResponseDTO> deleteTicket(Long ticketId) {
+        return new ResponseEntity<>(ticketService.deleteTicketById(ticketId), HttpStatus.OK);
+    }
 }

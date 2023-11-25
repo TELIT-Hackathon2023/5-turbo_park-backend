@@ -167,17 +167,17 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
   /ticket/{ticketId}:
+    parameters:
+      - name: ticketId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
     get:
       tags:
         - ticket
       operationId: getTicket
-      parameters:
-        - name: ticketId
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
       responses:
         '200':
           description: Successfully get for ticket
@@ -191,6 +191,26 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    delete:
+      tags:
+        - ticket
+      operationId: deleteTicket
+      responses:
+        '200':
+          description: Successfully get for ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
 components:
   schemas:
     EmployeeCreate:
