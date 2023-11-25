@@ -9,7 +9,7 @@ servers:
 tags:
   - name: employee
 paths:
-  /register:
+  /employee/register:
     post:
       tags:
         - employee
@@ -33,7 +33,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /login:
+  /employee/login:
     post:
       tags:
         - employee
