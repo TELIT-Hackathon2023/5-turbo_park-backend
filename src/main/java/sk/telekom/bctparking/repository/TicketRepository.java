@@ -28,4 +28,11 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("parkingSlotId") Long parkingSlotId,
             @Param("startDate") OffsetDateTime startDate,
             @Param("endDate") OffsetDateTime endDate);
+
+    @Query("SELECT COUNT(t) FROM Ticket t " +
+            "WHERE t.parkingSlot.id = :parkingLotId " +
+            "AND :currentTime BETWEEN t.startDate AND t.endDate")
+    long countUsedSlotsForParkingLotAtCurrentTime(
+            @Param("parkingLotId") Long parkingLotId,
+            @Param("currentTime") OffsetDateTime currentTime);
 }
