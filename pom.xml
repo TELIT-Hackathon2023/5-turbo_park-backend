@@ -99,6 +99,7 @@
 								ApiUtil.java
 							</supportingFilesToGenerate>
 							<configOptions>
+								<interfaceOnly>true</interfaceOnly>
 								<delegatePattern>true</delegatePattern>
 								<useSpringBoot3>true</useSpringBoot3>
 								<useJakartaEe>true</useJakartaEe>
