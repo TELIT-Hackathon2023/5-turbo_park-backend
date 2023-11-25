@@ -78,6 +78,30 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ParkingSlotResponse'
+  /ticket:
+    post:
+      tags:
+        - ticket
+      operationId: createTicket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketCreate'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketCreate'
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     EmployeeCreate:
@@ -174,6 +198,34 @@ components:
           items:
             format: double
           example: [6.1355134451, 8.34553465431]
+    TicketCreate:
+      required:
+        - id
+        - employeeID
+        - parkingSlotID
+        - startDate
+        - endDate
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        employeeID:
+          type: integer
+          format: int64
+          example: 1
+        parkingSlot:
+          type: integer
+          format: int64
+          example: 1
+        startDate:
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+        endDate:
+          type: string
+          format: data-time
+          example: 2017-07-21T17:32:28Z
     ErrorResponse:
       type: object
       properties:
