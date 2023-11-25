@@ -27,8 +27,16 @@ public class ParkingSlotService {
         List<ParkingSlotResponseDTO> parkingSlotResponseDTOList = parkingSlotMapper
                 .mapEntityListToResponseDTOList(parkingSlotList);
         // check what is the current status of the parking slot (free, used, unavailable)
-        long overlapping = ticketRepository.countUsedSlotsForParkingLotAtCurrentTime(1L, OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
-        System.out.println(overlapping);
+        for (ParkingSlotResponseDTO parkingSlot : parkingSlotResponseDTOList) {
+            long overlapping = ticketRepository.countUsedSlotsForParkingLotAtCurrentTime(parkingSlot.getId(),
+                    OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC));
+            if (overlapping == 0) {
+                parkingSlot.setStatus(ParkingSlotResponseDTO.StatusEnum.FREE);
+            } else {
+                parkingSlot.setStatus(ParkingSlotResponseDTO.StatusEnum.USED);
+            }
+        }
+
         return parkingSlotResponseDTOList;
     }
 }
