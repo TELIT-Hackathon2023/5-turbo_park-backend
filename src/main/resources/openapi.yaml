@@ -105,9 +105,9 @@ paths:
             format: int64
       requestBody:
         content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/EmployeeUpdate'
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdate'
         required: true
       responses:
         '200':
