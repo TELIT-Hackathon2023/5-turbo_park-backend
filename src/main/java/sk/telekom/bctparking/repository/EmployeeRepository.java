@@ -6,4 +6,6 @@ import sk.telekom.bctparking.model.Employee;
 
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
+
+    boolean existsByEmailOrLicencePlateNumberOrPersonalId(String email, String licencePlateNumber, Long personalId);
 }
