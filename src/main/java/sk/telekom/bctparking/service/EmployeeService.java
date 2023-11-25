@@ -7,7 +7,6 @@ import sk.telekom.bctparking.mapper.EmployeeMapper;
 import sk.telekom.bctparking.model.Employee;
 import sk.telekom.bctparking.repository.EmployeeRepository;
 import sk.telekom.openapi.model.EmployeeCreateDTO;
-import sk.telekom.openapi.model.EmployeeLoginDTO;
 import sk.telekom.openapi.model.EmployeeResponseDTO;
 
 @Service
