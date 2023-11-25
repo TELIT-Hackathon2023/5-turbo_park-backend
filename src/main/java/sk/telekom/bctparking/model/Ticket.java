@@ -26,7 +26,7 @@ public class Ticket {
 
     @ManyToOne
     @NotBlank
-    private ParkingSlot parkingSpot;
+    private ParkingSlot parkingSlot;
 
     @NotBlank
     private OffsetDateTime startDate;
