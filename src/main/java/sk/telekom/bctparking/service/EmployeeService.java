@@ -8,6 +8,7 @@ import sk.telekom.bctparking.model.Employee;
 import sk.telekom.bctparking.repository.EmployeeRepository;
 import sk.telekom.openapi.model.EmployeeCreateDTO;
 import sk.telekom.openapi.model.EmployeeResponseDTO;
+import sk.telekom.openapi.model.EmployeeUpdateDTO;
 
 @Service
 @RequiredArgsConstructor
@@ -30,4 +31,8 @@ public class EmployeeService {
 
 //    public EmployeeResponseDTO login(EmployeeLoginDTO employeeLoginDTO) {
 //    }
+
+    public EmployeeResponseDTO update(Long employeeId, EmployeeUpdateDTO employeeUpdateDTO) {
+
+    }
 }
