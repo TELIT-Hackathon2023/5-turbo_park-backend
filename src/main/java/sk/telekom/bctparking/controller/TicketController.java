@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import sk.telekom.bctparking.service.TicketService;
 import sk.telekom.openapi.api.TicketApi;
 import sk.telekom.openapi.model.TicketCreateDTO;
+import sk.telekom.openapi.model.TicketResponseDTO;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,7 +16,7 @@ public class TicketController implements TicketApi {
     private final TicketService ticketService;
 
     @Override
-    public ResponseEntity<TicketCreateDTO> createTicket(TicketCreateDTO ticketCreateDTO) {
+    public ResponseEntity<TicketResponseDTO> createTicket(TicketCreateDTO ticketCreateDTO) {
         return new ResponseEntity<>(ticketService.saveTicket(ticketCreateDTO), HttpStatus.CREATED);
     }
 }
