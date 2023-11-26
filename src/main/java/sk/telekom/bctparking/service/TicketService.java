@@ -31,6 +31,8 @@ public class TicketService {
 
     private final TicketMapper ticketMapper;
 
+    private final EmailService emailService;
+
     public TicketResponseDTO saveTicket(TicketCreateDTO ticketCreateDTO) {
         if (ticketCreateDTO.getStartDate().isAfter(ticketCreateDTO.getEndDate())) {
             throw new InvalidRequestException("Start date should not be before end date");
@@ -62,6 +64,11 @@ public class TicketService {
 
         ticket = ticketRepository.save(ticket);
 
+        emailService.sendEmail(ticket.getEmployee().getEmail(), "Parking slot reservation",
+                "You have successfully reserved a parking slot number: " + ticket.getParkingSlot().getId()
+                        + ". Your reservation starts at " + ticket.getStartDate().toLocalDateTime().plusHours(1)
+                        + " and lasts until " + ticket.getEndDate().toLocalDateTime().plusHours(1) + ".");
+
         TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
         ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
         ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
@@ -81,6 +88,12 @@ public class TicketService {
     public TicketResponseDTO deleteTicketById(Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId).orElseThrow(() -> new ResourceNotFoundException("Ticket was not found"));
         ticketRepository.delete(ticket);
+
+        emailService.sendEmail(ticket.getEmployee().getEmail(), "Parking slot cancellation",
+                "You have successfully canceled your reservation for a parking slot number: " + ticket.getParkingSlot().getId()
+                        + " which was starting at " + ticket.getStartDate().toLocalDateTime().plusHours(1)
+                        + " and lasted until " + ticket.getEndDate().toLocalDateTime().plusHours(1) + ".");
+
         TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
         ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
         ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
@@ -110,6 +123,12 @@ public class TicketService {
         ticket.setStartDate(ticketUpdateDTO.getStartDate());
         ticket.setEndDate(ticketUpdateDTO.getEndDate());
         Ticket updatedTicket = ticketRepository.save(ticket);
+
+        emailService.sendEmail(ticket.getEmployee().getEmail(), "Parking slot update",
+                "You have successfully changed your reservation for a parking slot number: " + ticket.getParkingSlot().getId()
+                        + " to start at " + ticket.getStartDate().toLocalDateTime().plusHours(1)
+                        + " and lasts until " + ticket.getEndDate().toLocalDateTime().plusHours(1) + ".");
+
         TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
         ticketResponseDTO.setEmployeeID(updatedTicket.getEmployee().getId());
         ticketResponseDTO.setParkingSlotID(updatedTicket.getParkingSlot().getId());
