@@ -53,6 +53,9 @@ public class ParkingSlotService {
             }
         }
 
-        return parkingSlotMapper.mapEntityListToResponseDTOList(returnedSlots);
+        List<ParkingSlotResponseDTO> parkingSlotResponseDTOList = parkingSlotMapper.mapEntityListToResponseDTOList(returnedSlots);
+        parkingSlotResponseDTOList.forEach(parkingSlotResponseDTO -> parkingSlotResponseDTO
+                .setStatus(ParkingSlotResponseDTO.StatusEnum.FREE));
+        return parkingSlotResponseDTOList;
     }
 }
