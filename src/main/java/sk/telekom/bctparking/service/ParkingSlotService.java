@@ -7,9 +7,11 @@ import sk.telekom.bctparking.model.ParkingSlot;
 import sk.telekom.bctparking.repository.ParkingSlotRepository;
 import sk.telekom.bctparking.repository.TicketRepository;
 import sk.telekom.openapi.model.ParkingSlotResponseDTO;
+import sk.telekom.openapi.model.TicketUpdateDTO;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -38,5 +40,20 @@ public class ParkingSlotService {
         }
 
         return parkingSlotResponseDTOList;
+    }
+
+    public List<ParkingSlotResponseDTO> findFreeParkingSlots(TicketUpdateDTO ticketUpdateDTO) {
+        List<ParkingSlot> parkingSlotList = parkingSlotRepository.findAll();
+        List<ParkingSlot> returnedSlots = new LinkedList<>();
+        for (ParkingSlot parkingSlot : parkingSlotList) {
+            long count = ticketRepository.countOverlappingTicketsForParkingSlot(parkingSlot.getId(),
+                    ticketUpdateDTO.getStartDate(), ticketUpdateDTO.getEndDate());
+            if (count == 0) {
+                System.out.println("Added to list");
+                returnedSlots.add(parkingSlot);
+            }
+        }
+
+        return parkingSlotMapper.mapEntityListToResponseDTOList(returnedSlots);
     }
 }
