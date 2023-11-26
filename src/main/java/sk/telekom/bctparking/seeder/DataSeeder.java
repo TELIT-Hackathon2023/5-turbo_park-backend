@@ -25,10 +25,10 @@ public class DataSeeder implements CommandLineRunner {
 
     private void generateData() {
         ParkingSlot parkingSlot1 = new ParkingSlot()
-                .setCoordinate1(new double[]{21.249110658203392, 48.70661979856919})
-                .setCoordinate2(new double[]{21.249030694848017, 48.70660132388187})
-                .setCoordinate3(new double[]{21.249098588263507, 48.70664314082907})
-                .setCoordinate4(new double[]{21.249019127820816, 48.70662455552343});
+                .setCoordinate1(new double[]{21.249109882595064, 48.706621406825434})
+                .setCoordinate2(new double[]{21.249030377398668, 48.70660210090807})
+                .setCoordinate3(new double[]{21.249019363692298, 48.70662345098057})
+                .setCoordinate4(new double[]{21.249099213065932, 48.70664230263324});
         ParkingSlot parkingSlot2 = new ParkingSlot()
                 .setCoordinate1(new double[]{21.249097582434445, 48.706645685245434})
                 .setCoordinate2(new double[]{21.249016948646755, 48.70662711285897})
@@ -45,10 +45,10 @@ public class DataSeeder implements CommandLineRunner {
                 .setCoordinate3(new double[]{21.24897873691782, 48.70670061729945})
                 .setCoordinate4(new double[]{21.24905886791197, 48.70671898132403});
         ParkingSlot parkingSlot5 = new ParkingSlot()
-                .setCoordinate1(new double[]{21.249057293296147, 48.706721950780576})
-                .setCoordinate2(new double[]{21.248976827025587, 48.70670369738386})
-                .setCoordinate3(new double[]{21.249046732097952, 48.70674496111312})
-                .setCoordinate4(new double[]{21.248966433466165, 48.706726265218805});
+                .setCoordinate1(new double[]{21.24905691255543, 48.70672235532081})
+                .setCoordinate2(new double[]{21.2489770886246, 48.70670309532889})
+                .setCoordinate3(new double[]{21.248966611734176, 48.706725976856916})
+                .setCoordinate4(new double[]{21.24904693456395, 48.706744413764085});
 
         parkingSlotRepository.saveAll(Arrays.asList(parkingSlot1, parkingSlot2, parkingSlot3,
                 parkingSlot4, parkingSlot5));
