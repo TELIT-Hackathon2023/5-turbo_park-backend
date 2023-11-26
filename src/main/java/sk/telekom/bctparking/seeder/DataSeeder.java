@@ -74,13 +74,13 @@ public class DataSeeder implements CommandLineRunner {
         Ticket ticket1 = new Ticket()
                 .setEmployee(employee1)
                 .setParkingSlot(parkingSlot1)
-                .setStartDate(OffsetDateTime.now())
-                .setEndDate(OffsetDateTime.now().plusHours(1));
+                .setStartDate(OffsetDateTime.now().withMinute(0).withSecond(0).withNano(0))
+                .setEndDate(OffsetDateTime.now().plusHours(1).withMinute(0).withSecond(0).withNano(0));
         Ticket ticket2 = new Ticket()
                 .setEmployee(employee2)
                 .setParkingSlot(parkingSlot1)
-                .setStartDate(OffsetDateTime.now().plusHours(1))
-                .setEndDate(OffsetDateTime.now().plusHours(2));
+                .setStartDate(OffsetDateTime.now().plusHours(1).withMinute(0).withSecond(0).withNano(0))
+                .setEndDate(OffsetDateTime.now().plusHours(2).withMinute(0).withSecond(0).withNano(0));
         ticketRepository.saveAll(Arrays.asList(ticket1,ticket2));
     }
 
