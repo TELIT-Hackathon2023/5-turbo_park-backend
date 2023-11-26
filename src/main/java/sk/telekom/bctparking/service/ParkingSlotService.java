@@ -49,7 +49,6 @@ public class ParkingSlotService {
             long count = ticketRepository.countOverlappingTicketsForParkingSlot(parkingSlot.getId(),
                     ticketUpdateDTO.getStartDate(), ticketUpdateDTO.getEndDate());
             if (count == 0) {
-                System.out.println("Added to list");
                 returnedSlots.add(parkingSlot);
             }
         }
