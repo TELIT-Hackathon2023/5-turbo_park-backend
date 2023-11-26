@@ -37,4 +37,9 @@ public class TicketController implements TicketApi {
     public ResponseEntity<TicketResponseDTO> updateTicket(Long ticketId, TicketUpdateDTO ticketUpdateDTO) {
         return new ResponseEntity<>(ticketService.updateTicketById(ticketId,ticketUpdateDTO), HttpStatus.OK);
     }
+
+    @Override
+    public ResponseEntity<TicketResponseDTO> getUserTicket(Long userId) {
+        return new ResponseEntity<>(ticketService.getUserTicket(userId), HttpStatus.OK);
+    }
 }

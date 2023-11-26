@@ -16,6 +16,8 @@ import sk.telekom.openapi.model.TicketResponseDTO;
 import sk.telekom.openapi.model.TicketUpdateDTO;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -112,5 +114,23 @@ public class TicketService {
         ticketResponseDTO.setEmployeeID(updatedTicket.getEmployee().getId());
         ticketResponseDTO.setParkingSlotID(updatedTicket.getParkingSlot().getId());
         return ticketResponseDTO;
+    }
+
+    public TicketResponseDTO getUserTicket(Long userId) {
+        Employee employee = employeeRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        List<Ticket> tickets = ticketRepository.findAllByEmployee_Id(employee.getId());
+        for (Ticket ticket : tickets) {
+            OffsetDateTime currentTime = OffsetDateTime.now().withOffsetSameInstant(ZoneOffset.UTC);
+            if (ticket.getStartDate().isAfter(currentTime) || ticket.getEndDate().isAfter(currentTime)) {
+                TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
+                ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
+                ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
+                return ticketResponseDTO;
+            }
+        }
+
+        throw new ResourceNotFoundException("Ticket doesn't exist");
     }
 }
