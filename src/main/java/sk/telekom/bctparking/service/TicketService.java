@@ -102,9 +102,11 @@ public class TicketService {
 
     public TicketResponseDTO updateTicketById(Long ticketId, TicketUpdateDTO ticketUpdateDTO) {
         if (ticketUpdateDTO.getStartDate().isAfter(ticketUpdateDTO.getEndDate())) {
+            System.out.println("Update fail 1");
             throw new InvalidRequestException("Start date should not be before end date");
         }
         if (ticketUpdateDTO.getStartDate().isAfter(OffsetDateTime.now().plusDays(2L))) {
+            System.out.println("Update fail 2");
             throw new InvalidRequestException("Ticket cannot be created more than 2 days in advance");
         }
 
@@ -112,11 +114,17 @@ public class TicketService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
 
         if (ticket.getEndDate().isBefore(OffsetDateTime.now())) {
+
+            System.out.println("Update fail 3");
             throw new InvalidRequestException("Ticket ended.");
         }
         long overlappingTickets = ticketRepository
-                .countOverlappingTicketsForParkingSlot(ticket.getParkingSlot().getId(), ticket.getStartDate(), ticket.getEndDate());
+                .countOverlappingTicketsForParkingSlotWhereEmployeeIdIsNot(ticket.getParkingSlot().getId(),
+                        ticketUpdateDTO.getStartDate(), ticketUpdateDTO.getEndDate(), ticket.getEmployee().getId());
         if (overlappingTickets > 0) {
+            System.out.println(overlappingTickets);
+            System.out.println(ticketUpdateDTO.getStartDate() + " end:" + ticketUpdateDTO.getEndDate());
+            System.out.println("Update fail 4");
             throw new InvalidRequestException("Provided timeframe is not available");
         }
 

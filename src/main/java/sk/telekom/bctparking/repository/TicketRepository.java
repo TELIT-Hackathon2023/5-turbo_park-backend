@@ -29,6 +29,16 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
             @Param("endDate") OffsetDateTime endDate);
 
     @Query("SELECT COUNT(t) FROM Ticket t " +
+            "WHERE t.parkingSlot.id = :parkingSlotId AND t.employee.id != :employeeId " +
+            "AND ((:endDate > t.startDate AND :startDate < t.endDate) " +
+            "OR (:startDate < t.endDate AND :endDate > t.startDate))")
+    long countOverlappingTicketsForParkingSlotWhereEmployeeIdIsNot(
+            @Param("parkingSlotId") Long parkingSlotId,
+            @Param("startDate") OffsetDateTime startDate,
+            @Param("endDate") OffsetDateTime endDate,
+            @Param("employeeId") Long employeeId);
+
+    @Query("SELECT COUNT(t) FROM Ticket t " +
             "WHERE t.parkingSlot.id = :parkingLotId " +
             "AND :currentTime BETWEEN t.startDate AND t.endDate")
     long countUsedSlotsForParkingLotAtCurrentTime(
