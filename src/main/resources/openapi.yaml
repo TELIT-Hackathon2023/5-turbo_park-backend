@@ -50,10 +50,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  token:
-                    type: string
+                $ref: '#/components/schemas/EmployeeLoginResponse'
         '400':
           description: Login not successful
           content:
@@ -280,6 +277,14 @@ components:
         password:
           type: string
           example: "Bob.amazingPa$$"
+    EmployeeLoginResponse:
+      required:
+        - token
+      type: object
+      properties:
+        token:
+          type: integer
+          format: int64
     EmployeeUpdate:
       required:
         - licencePlateNumber

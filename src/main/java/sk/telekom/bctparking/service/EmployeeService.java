@@ -2,14 +2,13 @@ package sk.telekom.bctparking.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sk.telekom.bctparking.exception.InvalidRequestException;
 import sk.telekom.bctparking.exception.ParameterNotUniqueException;
 import sk.telekom.bctparking.exception.ResourceNotFoundException;
 import sk.telekom.bctparking.mapper.EmployeeMapper;
 import sk.telekom.bctparking.model.Employee;
 import sk.telekom.bctparking.repository.EmployeeRepository;
-import sk.telekom.openapi.model.EmployeeCreateDTO;
-import sk.telekom.openapi.model.EmployeeResponseDTO;
-import sk.telekom.openapi.model.EmployeeUpdateDTO;
+import sk.telekom.openapi.model.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,8 +29,14 @@ public class EmployeeService {
         return employeeMapper.mapEntityToResponseDTO(employee);
     }
 
-//    public EmployeeResponseDTO login(EmployeeLoginDTO employeeLoginDTO) {
-//    }
+    public EmployeeLoginResponseDTO login(EmployeeLoginDTO employeeLoginDTO) {
+        Employee employee = employeeRepository.findByEmail(employeeLoginDTO.getEmail())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee not found"));
+
+        if (employee.getPassword().equals(employeeLoginDTO.getPassword())) {
+            return new EmployeeLoginResponseDTO().token(employee.getId());
+        } else throw new InvalidRequestException("Password is invalid");
+    }
 
     public EmployeeResponseDTO update(Long employeeId, EmployeeUpdateDTO employeeUpdateDTO) {
         Employee employee = employeeRepository.findById(employeeId)
