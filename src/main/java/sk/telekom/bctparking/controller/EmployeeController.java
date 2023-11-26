@@ -20,8 +20,8 @@ public class EmployeeController implements EmployeeApi {
     }
 
     @Override
-    public ResponseEntity<LoginEmployee200ResponseDTO> loginEmployee(EmployeeLoginDTO employeeLoginDTO) {
-        return EmployeeApi.super.loginEmployee(employeeLoginDTO);
+    public ResponseEntity<EmployeeLoginResponseDTO> loginEmployee(EmployeeLoginDTO employeeLoginDTO) {
+        return new ResponseEntity<>(employeeService.login(employeeLoginDTO), HttpStatus.OK);
     }
 
     @Override
