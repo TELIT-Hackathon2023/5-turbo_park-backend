@@ -139,6 +139,26 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/ParkingSlotResponse'
+  /parkingslot:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketUpdate'
+        required: true
+      tags:
+        - parkingSlot
+      operationId: findFreeParkingSlots
+      responses:
+        '200':
+          description: Returned free parking slots
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ParkingSlotResponse'
   /ticket:
     post:
       tags:
@@ -430,7 +450,6 @@ components:
           type: string
           format: date-time
           example: 2017-07-21T17:32:28Z
-
     ErrorResponse:
       type: object
       properties:
