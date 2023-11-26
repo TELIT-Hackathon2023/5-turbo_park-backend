@@ -3,6 +3,7 @@ package sk.telekom.bctparking.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RestController;
 import sk.telekom.bctparking.service.EmployeeService;
 import sk.telekom.openapi.api.EmployeeApi;
@@ -10,6 +11,7 @@ import sk.telekom.openapi.model.*;
 
 @RestController
 @RequiredArgsConstructor
+@CrossOrigin("*")
 public class EmployeeController implements EmployeeApi {
 
     private final EmployeeService employeeService;
