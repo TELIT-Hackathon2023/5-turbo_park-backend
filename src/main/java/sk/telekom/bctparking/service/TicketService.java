@@ -86,11 +86,31 @@ public class TicketService {
     }
 
     public TicketResponseDTO updateTicketById(Long ticketId, TicketUpdateDTO ticketUpdateDTO) {
+        if (ticketUpdateDTO.getStartDate().isAfter(ticketUpdateDTO.getEndDate())) {
+            throw new InvalidRequestException("Start date should not be before end date");
+        }
+        if (ticketUpdateDTO.getStartDate().isAfter(OffsetDateTime.now().plusDays(2L))) {
+            throw new InvalidRequestException("Ticket cannot be created more than 2 days in advance");
+        }
+
         Ticket ticket = ticketRepository.findById(ticketId)
                 .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+
+        if (ticket.getEndDate().isBefore(OffsetDateTime.now())) {
+            throw new InvalidRequestException("Ticket ended.");
+        }
+        long overlappingTickets = ticketRepository
+                .countOverlappingTicketsForParkingSlot(ticket.getParkingSlot().getId(), ticket.getStartDate(), ticket.getEndDate());
+        if (overlappingTickets > 0) {
+            throw new InvalidRequestException("Provided timeframe is not available");
+        }
+
         ticket.setStartDate(ticketUpdateDTO.getStartDate());
         ticket.setEndDate(ticketUpdateDTO.getEndDate());
         Ticket updatedTicket = ticketRepository.save(ticket);
-        return ticketMapper.mapEntityToResponseDTO(updatedTicket);
+        TicketResponseDTO ticketResponseDTO = ticketMapper.mapEntityToResponseDTO(ticket);
+        ticketResponseDTO.setEmployeeID(updatedTicket.getEmployee().getId());
+        ticketResponseDTO.setParkingSlotID(updatedTicket.getParkingSlot().getId());
+        return ticketResponseDTO;
     }
 }
