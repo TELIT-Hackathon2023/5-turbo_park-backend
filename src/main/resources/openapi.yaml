@@ -188,6 +188,29 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    put:
+      tags:
+        - ticket
+      operationId: updateTicket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TicketUpdate'
+        required: true
+      responses:
+        '200':
+          description: Successfully get for ticket
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TicketResponse'
+        '404':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
     delete:
       tags:
         - ticket
@@ -205,9 +228,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
-
-
 components:
   schemas:
     EmployeeCreate:
@@ -371,6 +391,21 @@ components:
           type: integer
           format: int64
           example: 1
+    TicketUpdate:
+      required:
+        - startDate
+        - endDate
+      type: object
+      properties:
+        startDate:
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+        endDate:
+          type: string
+          format: date-time
+          example: 2017-07-21T17:32:28Z
+
     ErrorResponse:
       type: object
       properties:

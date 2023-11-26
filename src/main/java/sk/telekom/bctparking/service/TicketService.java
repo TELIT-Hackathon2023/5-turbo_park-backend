@@ -13,6 +13,7 @@ import sk.telekom.bctparking.repository.ParkingSlotRepository;
 import sk.telekom.bctparking.repository.TicketRepository;
 import sk.telekom.openapi.model.TicketCreateDTO;
 import sk.telekom.openapi.model.TicketResponseDTO;
+import sk.telekom.openapi.model.TicketUpdateDTO;
 
 import java.time.OffsetDateTime;
 
@@ -82,5 +83,14 @@ public class TicketService {
         ticketResponseDTO.setEmployeeID(ticket.getEmployee().getId());
         ticketResponseDTO.setParkingSlotID(ticket.getParkingSlot().getId());
         return ticketResponseDTO;
+    }
+
+    public TicketResponseDTO updateTicketById(Long ticketId, TicketUpdateDTO ticketUpdateDTO) {
+        Ticket ticket = ticketRepository.findById(ticketId)
+                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+        ticket.setStartDate(ticketUpdateDTO.getStartDate());
+        ticket.setEndDate(ticketUpdateDTO.getEndDate());
+        Ticket updatedTicket = ticketRepository.save(ticket);
+        return ticketMapper.mapEntityToResponseDTO(updatedTicket);
     }
 }
